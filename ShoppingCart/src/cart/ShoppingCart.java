@@ -19,14 +19,43 @@ public class ShoppingCart {
 	}
 
 	
-	public String checkOut(List<String> basket) {
+	public Double checkOut(List<String> basket) {
 		
+		int numberOfApples = 0; 
+		int numberOfOranges = 0;
 		double total = 0;
-		//loop through the list of products, get the price of the product and add it to the total
+		
+		List<String> newBasket = new ArrayList<String>();
+		
+		//loop through the list of products
 		for(String product: basket) {
 			
+			//keep track of the amount oranges and apples to apply discount
+			if(product.equals("Orange")){
+				numberOfOranges ++;
+			}else {
+				numberOfApples ++;
+			}
+			
+			newBasket.add(product);
+			
+			//applying the discounts
+			if(numberOfOranges == 3 ) {
+				newBasket.remove("Orange");
+				numberOfOranges=0;
+			}
+			
+			if(numberOfApples == 2) {
+				newBasket.remove("Apple");
+				numberOfApples = 0;
+			}
+			
+		}
+		
+		for(String product: newBasket) {
+			
 			for(int i = 0; i < stock.size();i++) {
-				
+				// add the price of each product to the total
 				if(stock.get(i).getProductName().equals(product)) {
 					Product basketItem = stock.get(i);
 					total = total+ basketItem.getPrice();
@@ -34,7 +63,7 @@ public class ShoppingCart {
 			}
 		}
 		
-		return "£" + total/100;
+		return total/100;
 	}
 
 }
